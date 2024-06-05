@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcrypt";
-import jwy from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const userSchema= new mongoose.Schema({
     first_name:{
@@ -37,10 +37,12 @@ const userSchema= new mongoose.Schema({
         required:[true, "Please provide your password!"],
         minLength: [3, "Password must contain atleast 8 character!"],
         maxLength: [32, "Password cannot exceed 32 character!"],
+        select:false
     },
     confirm_password: {
         type: String,
         required: [true, "Please confirm your password!"],
+        select:false,
         validate: {
             validator: function (value) {
                 return value === this.password;
@@ -80,8 +82,8 @@ userSchema.methods.comparePassword = async function(enteredPassword){
 
 //GENERATING A JWT FOR AUTHORIZATION
 
-userSchema.methods.getJWTToken=function(){
-    return JsonWebTokenError.sign({id: this._id},process.env.JWT_SECRET_KEY,{
+userSchema.methods.geJWTToken=function(){
+    return jwt.sign({id: this._id},process.env.JWT_SECRET_KEY,{
         expiresIn: process.env.JWT_EXPIRE,
     });
 };
