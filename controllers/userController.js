@@ -80,6 +80,6 @@ export const login = catchAsyncError(async (req, res, next) => {
         success:true,
         message: "User login successfully!",
         user,
-    });
+    });s
 });
 
